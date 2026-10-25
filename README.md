@@ -22,11 +22,11 @@ Source: https://www.kaggle.com/datasets/malaiarasugraj/global-health-statistics
 
 ## Team
 - Ahmed Ragab Ali Mohammed Aboelanen (Project Leader)
-- Aya Abdelaziz Ibrahim Mohammed
-- Mohamed Kamal Said Abdelrehim Kamal
 - Shahad Tarek Mohammed Sharaf
-- Louka Mokhles Meladh Azer
 - Dalia Mohamed Gouda Al_Sayed
+- Mohamed Kamal Said Abdelrehim Kamal
+- Aya Abdelaziz Ibrahim Mohammed
+- Louka Mokhles Meladh Azer
 
 ## Status
 In progress.
