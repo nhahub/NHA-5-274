@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Star Schema</title>
+<style>
+  body { margin: 0; background: #ffffff; font-family: "Segoe UI", Arial, sans-serif; }
+  h2 { text-align: center; margin: 12px 0 4px; color: #1f4e79; font-size: 22px; }
+  #wrap { position: relative; width: 1400px; height: 930px; margin: 0 auto; }
+  #lines { position: absolute; left: 0; top: 0; width: 1400px; height: 930px; }
+  .t { position: absolute; width: 280px; border: 2px solid #1f4e79; border-radius: 8px; background: #ffffff; overflow: hidden; font-size: 13px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  .t h4 { margin: 0; padding: 6px 8px; background: #1f4e79; color: #ffffff; font-size: 14px; text-align: center; }
+  .fact { width: 340px; border-color: #c55a11; }
+  .fact h4 { background: #c55a11; font-size: 16px; padding: 8px; }
+  .r { white-space: nowrap; padding: 2px 8px; display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid #e3e3e3; }
+  .k { display: inline-block; width: 26px; color: #c00000; font-weight: 700; font-size: 11px; }
+  .ty { color: #777777; font-size: 11px; }
+  .note { text-align: center; color: #555555; font-size: 13px; margin: 4px 0 12px; }
+</style>
+</head>
+<body>
+<h2>Star Schema: Global Health Statistics (1 fact table, 8 dimension tables)</h2>
+<div id="wrap"><svg id="lines"></svg></div>
+<div class="note">PK = primary key, FK = foreign key. 1 = one dimension row, N = many fact rows (one-to-many).</div>
+<script>
+window.addEventListener('load', function () {
+  var wrap = document.getElementById('wrap');
+  var svg = document.getElementById('lines');
+
+  var dims = [
+    {n: 'dim_disease', x: 300, y: 20, r: [['PK','disease_id','INT'], ['','disease_name','NVARCHAR(50)'], ['','disease_group','NVARCHAR(30)']]},
+    {n: 'dim_country', x: 820, y: 20, r: [['PK','country_id','INT'], ['','country_name','NVARCHAR(50)']]},
+    {n: 'dim_age_group', x: 40, y: 190, r: [['PK','age_group_id','INT'], ['','age_group_label','NVARCHAR(10)'], ['','sort_order','INT']]},
+    {n: 'dim_gender', x: 40, y: 540, r: [['PK','gender_id','INT'], ['','gender_name','NVARCHAR(10)']]},
+    {n: 'dim_treatment_type', x: 1080, y: 190, r: [['PK','treatment_type_id','INT'], ['','treatment_type_name','NVARCHAR(30)']]},
+    {n: 'dim_disease_category', x: 1080, y: 540, r: [['PK','disease_category_id','INT'], ['','category_name','NVARCHAR(50)']]},
+    {n: 'dim_year', x: 300, y: 800, r: [['PK','year','INT'], ['','decade','INT']]},
+    {n: 'dim_income_band', x: 820, y: 790, r: [['PK','income_band_id','INT'], ['','band_name','NVARCHAR(20)'], ['','min_income','INT'], ['','max_income','INT']]}
+  ];
+
+  var fact = {n: 'fact_health_stats', x: 530, y: 160, r: [
+    ['PK','health_stat_id','INT'],
+    ['FK','disease_id','INT'], ['FK','country_id','INT'], ['FK','age_group_id','INT'], ['FK','gender_id','INT'],
+    ['FK','treatment_type_id','INT'], ['FK','disease_category_id','INT'], ['FK','year','INT'], ['FK','income_band_id','INT'],
+    ['','prevalence_rate_pct','DECIMAL(5,2)'], ['','incidence_rate_pct','DECIMAL(5,2)'], ['','mortality_rate_pct','DECIMAL(5,2)'],
+    ['','population_affected','INT'], ['','healthcare_access_pct','DECIMAL(5,2)'], ['','doctors_per_1000','DECIMAL(4,2)'],
+    ['','hospital_beds_per_1000','DECIMAL(4,2)'], ['','avg_treatment_cost_usd','INT'], ['','treatment_available','BIT'],
+    ['','recovery_rate_pct','DECIMAL(5,2)'], ['','dalys','INT'], ['','improvement_5y_pct','DECIMAL(4,2)'],
+    ['','per_capita_income_usd','INT'], ['','education_index','DECIMAL(3,2)'], ['','urbanization_rate_pct','DECIMAL(5,2)']
+  ]};
+
+  function make(t, isFact) {
+    var d = document.createElement('div');
+    d.className = 't' + (isFact ? ' fact' : '');
+    d.style.left = t.x + 'px';
+    d.style.top = t.y + 'px';
+    var html = '<h4>' + t.n + '</h4>';
+    t.r.forEach(function (r) {
+      html += '<div class="r"><span><span class="k">' + r[0] + '</span>' + r[1] + '</span><span class="ty">' + r[2] + '</span></div>';
+    });
+    d.innerHTML = html;
+    wrap.appendChild(d);
+    return d;
+  }
+
+  function box(e) { return {x: e.offsetLeft, y: e.offsetTop, w: e.offsetWidth, h: e.offsetHeight}; }
+
+  function edge(b, vx, vy) {
+    var cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    var t = Math.min((b.w / 2) / Math.max(Math.abs(vx), 1e-9), (b.h / 2) / Math.max(Math.abs(vy), 1e-9));
+    return {x: cx + vx * t, y: cy + vy * t};
+  }
+
+  var f = make(fact, true);
+  var els = dims.map(function (t) { return make(t, false); });
+
+  var fb = box(f);
+  var fcx = fb.x + fb.w / 2, fcy = fb.y + fb.h / 2;
+  var out = '';
+  els.forEach(function (e) {
+    var b = box(e);
+    var cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    var vx = fcx - cx, vy = fcy - cy;
+    var p1 = edge(b, vx, vy), p2 = edge(fb, -vx, -vy);
+    var len = Math.sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
+    var ux = (p2.x - p1.x) / len, uy = (p2.y - p1.y) / len;
+    out += '<line x1="' + p1.x + '" y1="' + p1.y + '" x2="' + p2.x + '" y2="' + p2.y + '" stroke="#7f7f7f" stroke-width="2"/>';
+    out += '<text x="' + (p1.x + ux * 26 - 5) + '" y="' + (p1.y + uy * 26 + 5) + '" font-size="16" font-weight="700" fill="#333333">1</text>';
+    out += '<text x="' + (p2.x - ux * 26 - 5) + '" y="' + (p2.y - uy * 26 + 5) + '" font-size="16" font-weight="700" fill="#333333">N</text>';
+  });
+  svg.innerHTML = out;
+});
+</script>
+</body>
+</html>

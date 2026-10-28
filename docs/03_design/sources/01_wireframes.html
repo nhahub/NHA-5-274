@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Wireframes</title>
+<style>
+  body { margin: 0; padding: 20px 0 40px; background: #d9d9d9; font-family: "Segoe UI", Arial, sans-serif; color: #333333; }
+  .cap { width: 1280px; margin: 28px auto 6px; font-size: 18px; font-weight: 700; color: #1f4e79; }
+  .frame { width: 1280px; margin: 0 auto; background: #f2f2f2; border: 2px solid #7f7f7f; border-radius: 6px; overflow: hidden; }
+  .top { display: flex; justify-content: space-between; align-items: center; background: #1f4e79; color: #ffffff; padding: 10px 16px; }
+  .top b { font-size: 20px; }
+  .pill { background: #c55a11; color: #ffffff; font-size: 12px; padding: 4px 10px; border-radius: 12px; }
+  .tabs { display: flex; gap: 4px; background: #e4e4e4; padding: 6px 12px 0; }
+  .tab { padding: 6px 12px; font-size: 12px; background: #cfcfcf; border-radius: 6px 6px 0 0; }
+  .tab.on { background: #f2f2f2; font-weight: 700; color: #1f4e79; }
+  .sl { display: flex; gap: 10px; padding: 10px 14px 4px; flex-wrap: wrap; }
+  .s { background: #ffffff; border: 1px solid #bfbfbf; border-radius: 4px; padding: 5px 10px; font-size: 12px; color: #555555; }
+  .s:after { content: " \25BE"; }
+  .body { display: flex; gap: 10px; padding: 10px 14px 14px; }
+  .grid { flex: 1; display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 84px; gap: 10px; }
+  .w { position: relative; background: #ffffff; border: 1px solid #bfbfbf; border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; overflow: hidden; }
+  .w .l { font-size: 12px; font-weight: 700; color: #404040; }
+  .w .q { position: absolute; right: 8px; top: 6px; font-size: 10px; color: #ffffff; background: #7f7f7f; border-radius: 8px; padding: 1px 6px; }
+  .w .ic { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .w svg { width: 100%; height: 100%; max-height: 100%; }
+  .kpi .big { flex: 1; display: flex; align-items: center; font-size: 30px; font-weight: 700; color: #1f4e79; }
+  .note { background: #fff8e5; border-color: #c55a11; justify-content: center; }
+  .note .l { font-weight: 400; font-style: italic; font-size: 12px; }
+  .side { width: 200px; background: #ffffff; border: 1px solid #bfbfbf; border-radius: 6px; padding: 10px; }
+  .side b { font-size: 13px; color: #404040; }
+  .side .s { margin-top: 8px; }
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script>
+var B = '#1f4e79', O = '#c55a11', G = '#bfbfbf', T = '#2a9d8f';
+function svg(inner) { return '<svg viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">' + inner + '</svg>'; }
+var icons = {
+  line: function () { return svg('<polyline fill="none" stroke="' + B + '" stroke-width="3" points="5,70 30,55 55,62 80,35 105,45 130,25 155,38 195,15"/><line x1="5" y1="90" x2="195" y2="90" stroke="' + G + '"/>'); },
+  bar: function () { return svg('<rect x="10" y="40" width="22" height="50" fill="' + B + '"/><rect x="45" y="20" width="22" height="70" fill="' + B + '"/><rect x="80" y="55" width="22" height="35" fill="' + B + '"/><rect x="115" y="30" width="22" height="60" fill="' + B + '"/><rect x="150" y="48" width="22" height="42" fill="' + B + '"/><line x1="5" y1="90" x2="195" y2="90" stroke="' + G + '"/>'); },
+  hbar: function () { return svg('<rect x="10" y="8" width="150" height="14" fill="' + B + '"/><rect x="10" y="30" width="120" height="14" fill="' + B + '"/><rect x="10" y="52" width="95" height="14" fill="' + B + '"/><rect x="10" y="74" width="70" height="14" fill="' + B + '"/>'); },
+  donut: function () { return svg('<circle cx="100" cy="50" r="32" fill="none" stroke="' + G + '" stroke-width="16"/><circle cx="100" cy="50" r="32" fill="none" stroke="' + B + '" stroke-width="16" stroke-dasharray="90 201" transform="rotate(-90 100 50)"/><circle cx="100" cy="50" r="32" fill="none" stroke="' + O + '" stroke-width="16" stroke-dasharray="50 201" stroke-dashoffset="-90" transform="rotate(-90 100 50)"/>'); },
+  map: function () { return svg('<path d="M20,40 L55,20 L90,30 L120,18 L170,35 L180,60 L140,80 L100,70 L60,85 L30,70 Z" fill="' + T + '" opacity="0.55" stroke="#ffffff" stroke-width="2"/><path d="M90,30 L120,18 L140,40 L110,55 Z" fill="' + O + '" opacity="0.7"/><path d="M60,85 L100,70 L110,55 L75,52 Z" fill="' + B + '" opacity="0.6"/>'); },
+  scatter: function () { var d = [[20,70],[35,50],[50,62],[65,35],[80,55],[95,28],[110,60],[125,40],[140,72],[155,30],[170,52],[60,78],[100,45],[130,20]]; return svg('<line x1="10" y1="90" x2="195" y2="90" stroke="' + G + '"/><line x1="10" y1="5" x2="10" y2="90" stroke="' + G + '"/>' + d.map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4" fill="' + B + '"/>'; }).join('')); },
+  heat: function () { var s = ''; var c = ['#cfe0f1', '#9fc0e2', '#5f93c6', '#1f4e79']; for (var r = 0; r < 4; r++) { for (var k = 0; k < 8; k++) { s += '<rect x="' + (10 + k * 23) + '" y="' + (6 + r * 22) + '" width="21" height="20" fill="' + c[(r * 3 + k * 5) % 4] + '"/>'; } } return svg(s); },
+  cluster: function () { var a = [150, 120, 100, 80], b = [120, 100, 90, 60], t = ''; for (var i = 0; i < 4; i++) { t += '<rect x="10" y="' + (6 + i * 23) + '" width="' + a[i] + '" height="9" fill="' + B + '"/><rect x="10" y="' + (16 + i * 23) + '" width="' + b[i] + '" height="9" fill="' + O + '"/>'; } return svg(t); },
+  stack: function () { var a = [50, 35, 60, 45, 55], b = [25, 35, 15, 30, 20], t = '<line x1="5" y1="90" x2="195" y2="90" stroke="' + G + '"/>'; for (var i = 0; i < 5; i++) { t += '<rect x="' + (15 + i * 36) + '" y="' + (90 - a[i]) + '" width="24" height="' + a[i] + '" fill="' + B + '"/><rect x="' + (15 + i * 36) + '" y="' + (90 - a[i] - b[i]) + '" width="24" height="' + b[i] + '" fill="' + O + '"/>'; } return svg(t); },
+  ccol: function () { var a = [55, 40, 65, 50], b = [45, 60, 35, 55], t = '<line x1="5" y1="90" x2="195" y2="90" stroke="' + G + '"/>'; for (var i = 0; i < 4; i++) { t += '<rect x="' + (18 + i * 44) + '" y="' + (90 - a[i]) + '" width="16" height="' + a[i] + '" fill="' + B + '"/><rect x="' + (35 + i * 44) + '" y="' + (90 - b[i]) + '" width="16" height="' + b[i] + '" fill="' + O + '"/>'; } return svg(t); },
+  table: function () { var s = '<rect x="5" y="5" width="190" height="14" fill="' + B + '"/>'; for (var r = 1; r < 5; r++) { s += '<line x1="5" y1="' + (5 + r * 18) + '" x2="195" y2="' + (5 + r * 18) + '" stroke="' + G + '"/>'; } return svg(s + '<line x1="75" y1="5" x2="75" y2="95" stroke="' + G + '"/><line x1="135" y1="5" x2="135" y2="95" stroke="' + G + '"/>'); }
+};
+function widget(it) {
+  var type = it[0], label = it[1], cs = it[2], rs = it[3] || 1, tag = it[4] || '';
+  if (type === 'note') { return '<div class="w note" style="grid-column: span ' + cs + '; grid-row: span ' + rs + ';"><div class="l">' + label + '</div></div>'; }
+  var h = '<div class="w ' + (type === 'kpi' ? 'kpi' : '') + '" style="grid-column: span ' + cs + '; grid-row: span ' + rs + ';">';
+  h += '<div class="l">' + label + '</div>';
+  if (tag) { h += '<div class="q">' + tag + '</div>'; }
+  h += type === 'kpi' ? '<div class="big">1,234</div>' : '<div class="ic">' + icons[type]() + '</div>';
+  return h + '</div>';
+}
+var TABS = ['Overview', 'Disease Burden', 'Mortality and Recovery', 'Healthcare Capacity', 'Socioeconomic', 'Treatment', 'Trends'];
+var frames = [
+  { cap: 'Wireframe 1: Power BI, page 1 Overview', tabs: TABS, on: 0,
+    sl: ['Year range', 'Country', 'Disease', 'Age group', 'Gender', 'Treatment type'],
+    it: [['kpi', 'Total population affected', 3, 1, 'Q2'], ['kpi', 'Average mortality rate (%)', 3, 1, 'Q3'], ['kpi', 'Average recovery rate (%)', 3, 1, 'Q3'], ['kpi', 'Average treatment cost (USD)', 3, 1, 'Q6'],
+         ['line', 'Average mortality rate by year', 6, 2, 'Q7'], ['hbar', 'Population affected by disease (top 10)', 6, 2, 'Q2'],
+         ['bar', 'DALYs by country', 6, 2, 'Q2'], ['donut', 'Cases by disease group', 3, 2, 'Q3'], ['donut', 'Cases by gender', 3, 2, 'Q2']] },
+  { cap: 'Wireframe 2: Power BI, page 2 Disease Burden', tabs: TABS, on: 1,
+    sl: ['Year range', 'Country', 'Disease', 'Age group', 'Gender'],
+    it: [['hbar', 'Population affected by disease', 6, 3, 'Q2'], ['bar', 'DALYs by country', 6, 3, 'Q2'],
+         ['stack', 'Population affected by age group and gender', 5, 3, 'Q2'], ['heat', 'Matrix: prevalence rate by disease and country', 7, 3, 'Q2']] },
+  { cap: 'Wireframe 3: Power BI, page 3 Mortality and Recovery', tabs: TABS, on: 2,
+    sl: ['Year range', 'Country', 'Age group', 'Gender'],
+    it: [['cluster', 'Mortality and recovery rate by disease', 7, 3, 'Q3'], ['bar', 'Rates by disease group (communicable vs. non-communicable)', 5, 3, 'Q3'],
+         ['table', 'Diseases ranked by mortality and recovery', 12, 2, 'Q3']] },
+  { cap: 'Wireframe 4: Power BI, page 4 Healthcare Capacity', tabs: TABS, on: 3,
+    sl: ['Year range', 'Country', 'Income band'],
+    it: [['kpi', 'Average doctors per 1000', 4, 1, 'Q4'], ['kpi', 'Average hospital beds per 1000', 4, 1, 'Q4'], ['kpi', 'Average healthcare access (%)', 4, 1, 'Q4'],
+         ['hbar', 'Doctors and beds per 1000 by country', 7, 3, 'Q4'], ['scatter', 'Healthcare access vs. recovery rate', 5, 3, 'Q5'],
+         ['heat', 'Healthcare access by country and year', 8, 2, 'Q4'], ['table', 'Countries with the lowest capacity', 4, 2, 'Q4']] },
+  { cap: 'Wireframe 5: Power BI, page 5 Socioeconomic', tabs: TABS, on: 4,
+    sl: ['Year range', 'Country'],
+    it: [['scatter', 'Income vs. healthcare access', 4, 3, 'Q5'], ['scatter', 'Education index vs. recovery rate', 4, 3, 'Q5'], ['bar', 'Average recovery rate by income band', 4, 3, 'Q5'],
+         ['note', 'Reading guide: the dataset is synthetic, so weak or no relationships are expected. Report this finding transparently.', 12, 1, '']] },
+  { cap: 'Wireframe 6: Power BI, page 6 Treatment', tabs: TABS, on: 5,
+    sl: ['Year range', 'Country', 'Disease group'],
+    it: [['bar', 'Average treatment cost by treatment type', 6, 2, 'Q6'], ['bar', 'Average recovery rate by treatment type', 6, 2, 'Q6'],
+         ['ccol', 'Recovery rate by treatment availability (Yes / No)', 6, 2, 'Q6'], ['scatter', 'Treatment cost vs. recovery rate', 6, 2, 'Q6']] },
+  { cap: 'Wireframe 7: Power BI, page 7 Trends', tabs: TABS, on: 6,
+    sl: ['Country', 'Disease', 'Age group'],
+    it: [['line', 'Mortality, prevalence, and recovery by year', 7, 3, 'Q7'], ['line', 'Five-year improvement by disease group', 5, 3, 'Q7'],
+         ['table', 'Yearly summary table', 12, 2, 'Q7']] },
+  { cap: 'Wireframe 8: Tableau Public, Deep Dive dashboard', tabs: null, on: 0,
+    sl: null, side: ['Year', 'Country', 'Disease group', 'Age group', 'Gender'],
+    it: [['map', 'Average mortality rate by country', 6, 3, 'Q3'], ['heat', 'Mortality rate by disease and age group', 6, 3, 'Q2'],
+         ['line', 'Yearly trend: mortality, prevalence, recovery', 6, 2, 'Q7'], ['bar', 'Average treatment cost by treatment type', 6, 2, 'Q6']] }
+];
+var html = '';
+frames.forEach(function (f) {
+  html += '<div class="cap">' + f.cap + '</div><div class="frame"><div class="top"><b>Global Health Insights</b><span class="pill">Synthetic dataset: for methodology demonstration</span></div>';
+  if (f.tabs) { html += '<div class="tabs">' + f.tabs.map(function (t, i) { return '<div class="tab ' + (i === f.on ? 'on' : '') + '">' + t + '</div>'; }).join('') + '</div>'; }
+  if (f.sl) { html += '<div class="sl">' + f.sl.map(function (s) { return '<div class="s">' + s + '</div>'; }).join('') + '</div>'; }
+  html += '<div class="body">';
+  if (f.side) { html += '<div class="side"><b>Filters</b>' + f.side.map(function (s) { return '<div class="s">' + s + '</div>'; }).join('') + '</div>'; }
+  html += '<div class="grid">' + f.it.map(widget).join('') + '</div></div></div>';
+});
+document.getElementById('out').innerHTML = html;
+</script>
+</body>
+</html>
