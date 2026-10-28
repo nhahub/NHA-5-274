@@ -4,7 +4,7 @@
 This project analyzes the Global Health Statistics dataset (Kaggle) to understand how disease burden varies by country, age group, and gender, and how healthcare resources and economic factors relate to health outcomes. It follows an end-to-end analytics pipeline: data quality assessment and cleaning (Python), database design and analysis (SQL Server), and dashboards (Power BI and Tableau Public).
 
 ## Important Note About the Data
-Quality tests indicate that the dataset is synthetic (randomly generated). The project therefore focuses on analytics methodology and does not draw real-world health conclusions from the results. See the [Data Quality Assessment](docs/03_design/01_data_quality_assessment.docx).
+Quality tests indicate that the dataset is synthetic (randomly generated). The project therefore focuses on analytics methodology and does not draw real-world health conclusions from the results. See the [Data Quality Assessment](docs/03_design/01_data_quality_assessment.docx.docx).
 
 ## Dataset
 Source: https://www.kaggle.com/datasets/malaiarasugraj/global-health-statistics
