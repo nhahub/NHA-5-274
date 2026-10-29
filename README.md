@@ -29,7 +29,7 @@ Size: 1,000,000 rows and 22 columns (134.4 MB). The raw file is not stored in th
 |---|---|---|
 | Planning and requirements | 16 Oct 2026 | Documents uploaded (roles being finalized) |
 | System analysis and design | 6 Nov 2026 | Documents uploaded |
-| Implementation | 30 Nov 2026 | Starting with Python data cleaning |
+| Implementation | 30 Nov 2026 | Python data cleaning completed; SQL stage next |
 | Testing, reports, and final presentation | 4 Dec 2026 | Not started |
 
 ## Team
